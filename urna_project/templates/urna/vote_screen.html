@@ -1,0 +1,188 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urna Eletrônica - Votação</title>
+    <link rel="stylesheet" href="{% static 'urna/urna.css' %}">
+</head>
+<body>
+
+    <div id="candidate-data" style="display: none;">
+        {% for c in candidates %}
+            <div class="candidate-info" data-numero="{{ c.number }}" data-id="{{ c.id }}" data-nome="{{ c.name }}" data-partido="{{ c.party }}" data-foto="{% if c.photo %}{{ c.photo.url }}{% else %}{% endif %}"></div>
+        {% endfor %}
+    </div>
+
+    <div class="urna">
+        <div class="tela">
+            <div class="d-1">
+                <div class="d-1-left">
+                    <div class="d-1-1">
+                        <span>SEU VOTO PARA</span>
+                    </div>
+                    <div class="d-1-2">
+                        <span>CIPEIRO</span> </div>
+                    <div class="d-1-3">
+                        </div>
+                    <div class="d-1-4">
+                        Nome: <span class="candidate-name">---</span><br/>
+                        Partido: <span class="candidate-party">---</span>
+                    </div>
+                </div>
+                <div class="d-1-right">
+                    <div class="d-1-imagem">
+                        <img src="" alt="" />
+                        <span>CIPEIRO</span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-2">
+                Aperte a tecla:<br/>
+                CONFIRMA para CONFIRMAR este voto<br/>
+                CORRIGE para REINICIAR este voto
+            </div>
+        </div>
+        <div class="teclado">
+            <div class="teclado--linha">
+                <div class="teclado--botao" onclick="clicou('1')">1</div>
+                <div class="teclado--botao" onclick="clicou('2')">2</div>
+                <div class="teclado--botao" onclick="clicou('3')">3</div>
+            </div>
+            <div class="teclado--linha">
+                <div class="teclado--botao" onclick="clicou('4')">4</div>
+                <div class="teclado--botao" onclick="clicou('5')">5</div>
+                <div class="teclado--botao" onclick="clicou('6')">6</div>
+            </div>
+            <div class="teclado--linha">
+                <div class="teclado--botao" onclick="clicou('7')">7</div>
+                <div class="teclado--botao" onclick="clicou('8')">8</div>
+                <div class="teclado--botao" onclick="clicou('9')">9</div>
+            </div>
+            <div class="teclado--linha">
+                <div class="teclado--botao" onclick="clicou('0')">0</div>
+            </div>
+            <div class="teclado--linha">
+                <div class="teclado--botao botao--branco" onclick="branco()">BRANCO</div>
+                <div class="teclado--botao botao--corrige" onclick="corrige()">CORRIGE</div>
+                <div class="teclado--botao botao--confirma" onclick="confirma()">CONFIRMA</div>
+            </div>
+        </div>
+    </div>
+    
+    <form method="POST" id="voteForm" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="candidate_id" id="candidate_id_input">
+    </form>
+
+
+    <script>
+        // Elementos da interface
+        let seuVotoPara = document.querySelector('.d-1-1 span');
+        let cargo = document.querySelector('.d-1-2 span');
+        let numeros = document.querySelector('.d-1-3');
+        let descricao = document.querySelector('.d-1-4');
+        let lateral = document.querySelector('.d-1-right');
+        let aviso = document.querySelector('.d-2');
+
+        // Variáveis de controle
+        let numero = '';
+        let votoBranco = false;
+
+        function comecarEtapa() {
+            numero = '';
+            votoBranco = false;
+            
+            // ✨ MUDANÇA 1: Loop para criar 5 quadrados de número ✨
+            let numeroHTML = '';
+            for(let i=0; i<5; i++) {
+                if(i === 0) {
+                    numeroHTML += '<div class="numero pisca"></div>';
+                } else {
+                    numeroHTML += '<div class="numero"></div>';
+                }
+            }
+            numeros.innerHTML = numeroHTML;
+
+            descricao.style.display = 'none';
+            lateral.style.display = 'none';
+            seuVotoPara.style.display = 'block';
+            cargo.style.display = 'block';
+            aviso.style.display = 'block';
+        }
+
+        function atualizaInterface() {
+            if (votoBranco) {
+                numeros.innerHTML = '';
+                descricao.style.display = 'block';
+                descricao.innerHTML = '<div class="aviso--grande pisca">VOTO EM BRANCO</div>';
+                lateral.style.display = 'none';
+                return;
+            }
+
+            let candidato = document.querySelector(`.candidate-info[data-numero='${numero}']`);
+
+            if (candidato) {
+                descricao.style.display = 'block';
+                lateral.style.display = 'block';
+                document.querySelector('.candidate-name').innerText = candidato.getAttribute('data-nome');
+                document.querySelector('.candidate-party').innerText = candidato.getAttribute('data-partido');
+                let fotoUrl = candidato.getAttribute('data-foto');
+                if (fotoUrl) {
+                    document.querySelector('.d-1-imagem img').src = fotoUrl;
+                } else {
+                     document.querySelector('.d-1-imagem img').src = '';
+                }
+            } else if (numero.length === 5) { // ✨ MUDANÇA 2: Espera 5 dígitos para o voto nulo ✨
+                descricao.style.display = 'block';
+                descricao.innerHTML = '<div class="aviso--grande pisca">VOTO NULO</div>';
+            }
+        }
+
+        function clicou(n) {
+            let elNumero = document.querySelector('.numero.pisca');
+            if(elNumero !== null) {
+                elNumero.innerHTML = n;
+                numero += n;
+                elNumero.classList.remove('pisca');
+                if(elNumero.nextElementSibling !== null) {
+                    elNumero.nextElementSibling.classList.add('pisca');
+                } else {
+                    atualizaInterface();
+                }
+            }
+        }
+
+        function branco() {
+            numero = '';
+            votoBranco = true;
+            seuVotoPara.style.display = 'block';
+            aviso.style.display = 'block';
+            numeros.innerHTML = '';
+            atualizaInterface();
+        }
+
+        function corrige() {
+            comecarEtapa();
+        }
+
+        function confirma() {
+            let candidato = document.querySelector(`.candidate-info[data-numero='${numero}']`);
+            if (candidato) {
+                let candidateId = candidato.getAttribute('data-id');
+                document.getElementById('candidate_id_input').value = candidateId;
+                document.getElementById('voteForm').submit();
+            } else if (votoBranco) {
+                alert("Voto em Branco Computado (simulação)");
+            } else if (numero.length === 5) {
+                alert("Voto Nulo Computado (simulação)");
+            } else {
+                alert("Número incompleto. Por favor, termine de digitar ou corrija seu voto.");
+            }
+        }
+
+        comecarEtapa(); // Inicia a interface da urna
+    </script>
+</body>
+</html>

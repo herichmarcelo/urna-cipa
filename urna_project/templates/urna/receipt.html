@@ -1,0 +1,159 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comprovante de Votação</title>
+  <style>
+    /* Estilo Base (Mobile First) */
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 20px 10px; /* Mais preenchimento vertical, menos horizontal */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .receipt-container {
+      width: 100%; /* Ocupa toda a largura disponível no mobile */
+      max-width: 380px; /* Um limite máximo para não ficar estranho */
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border: 1px solid #ddd;
+      box-sizing: border-box; /* Garante que o padding não aumente a largura total */
+    }
+
+    .receipt-header, .receipt-footer {
+      text-align: center;
+    }
+
+    .receipt-header h2 {
+      margin: 0;
+      font-size: 16px;
+      text-transform: uppercase;
+    }
+    
+    .receipt-header p {
+      margin: 5px 0 15px 0;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .separator {
+      border-top: 1px dashed #000;
+      margin: 15px 0;
+    }
+
+    .receipt-body h3 {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 0;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .receipt-body p {
+      margin: 5px 0;
+      font-size: 14px;
+      word-wrap: break-word; /* Garante que textos longos quebrem a linha */
+    }
+
+    .receipt-body .label {
+      font-weight: bold;
+    }
+
+    .print-button-container {
+      text-align: center;
+      margin-top: 20px;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .print-button {
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      background-color: #009900; /* Verde CIPA */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Estilos para telas maiores (Desktop) */
+    @media (min-width: 480px) {
+      body {
+        justify-content: center; /* Centraliza verticalmente em telas grandes */
+        padding: 20px;
+      }
+      .receipt-container {
+        width: 320px; /* Volta para a largura fixa de recibo */
+      }
+      .print-button-container {
+        width: 320px;
+      }
+    }
+
+    /* Estilo específico para a impressão */
+    @media print {
+      body {
+        background-color: #fff;
+        padding: 0;
+        margin: 0;
+      }
+      .receipt-container {
+        width: 100%;
+        max-width: none;
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+      }
+      .print-button-container {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="receipt-container">
+    <div class="receipt-header">
+      <h2>Eleição CIPA 2025</h2>
+      <p>Comprovante de Votação</p>
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="receipt-body">
+      <h3>Informações do Eleitor</h3>
+      <p><span class="label">CPF:</span> {{ vote.voter.cpf }}</p>
+      <p><span class="label">Matrícula:</span> {{ vote.voter.registration }}</p>
+
+      <div class="separator"></div>
+
+      <h3>Voto Registrado</h3>
+      <p><span class="label">Candidato:</span> {{ vote.candidate.name }}</p>
+      <p><span class="label">Número:</span> {{ vote.candidate.number }}</p>
+      
+      <div class="separator"></div>
+    </div>
+    
+    <div class="receipt-footer">
+      <p><strong>Data/Hora:</strong> {{ vote.created_at }}</p>
+      <p>-- Guarde este comprovante --</p>
+    </div>
+  </div>
+
+  <div class="print-button-container">
+    <button class="print-button" onclick="window.print()">Imprimir Comprovante</button>
+  </div>
+
+</body>
+</html>

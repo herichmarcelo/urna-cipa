@@ -1,0 +1,120 @@
+/* static/urna/login.css */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    display: flex;
+    width: 900px;
+    height: 500px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.left-panel {
+    background-color: #0099ff;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 100px); /* Ajustei o tamanho para caber melhor */
+    gap: 15px;
+    justify-content: center;
+}
+
+.key {
+    background-color: #fff;
+    border: none;
+    font-size: 24px;
+    border-radius: 10px;
+    height: 70px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: transform 0.1s, background-color 0.2s;
+}
+
+.key:hover {
+    background-color: #e6e6e6;
+}
+
+.key:active {
+    transform: scale(0.95);
+}
+
+#clear {
+    background-color: #ff4d4d;
+    color: #fff;
+}
+
+#enter {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.right-panel {
+    background-color: #fff;
+    width: 50%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box; /* Garante que o padding não aumente o tamanho */
+}
+
+.right-panel h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin: 10px 0 5px;
+    color: #555;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+    box-sizing: border-box; /* Garante que o padding não aumente o tamanho */
+}
+
+.btn-login {
+    width: 100%;
+    margin-top: 25px;
+    background-color: #0099ff;
+    color: white;
+    padding: 15px;
+    font-size: 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-login:hover {
+    background-color: #007acc;
+}
+
+.error-message {
+    color: #ff4d4d;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+}

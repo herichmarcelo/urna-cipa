@@ -1,0 +1,190 @@
+/* ================================== */
+/* RESET BÁSICO E ESTILOS GERAIS      */
+/* ================================== */
+body {
+    background-color: #e5e5e5;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Mais seguro para mobile que 'height' */
+    padding: 20px;
+    box-sizing: border-box; /* Garante que padding não afete a largura total */
+}
+
+/* ================================== */
+/* CAIXA PRINCIPAL DA URNA (Mobile First) */
+/* ================================== */
+.urna {
+    background-color: #dbd5c9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column; /* LAYOUT VERTICAL: Teclado embaixo da tela */
+    width: 100%;
+    max-width: 450px; /* Um bom limite para telas de celular */
+    box-sizing: border-box;
+}
+
+/* ================================== */
+/* TELA                               */
+/* ================================== */
+.tela {
+    /* REMOVIDA a largura fixa para ser responsiva */
+    min-height: 320px; /* Altura mínima para manter a proporção */
+    background: linear-gradient(to right, #E8E8E8, #C1C1C1);
+    border: 2px solid #555;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- ESTILOS INTERNOS DA TELA --- */
+.d-1 {
+    flex: 1;
+    display: flex;
+    padding: 20px 0 20px 20px;
+}
+.d-2 {
+    height: 50px;
+    font-size: 14px;
+    border-top: 2px solid #000;
+    padding-left: 10px;
+    line-height: 50px;
+}
+
+/* Lado esquerdo da tela */
+.d-1-left {
+    flex: 1;
+}
+.d-1-1 { height: 50px; display: flex; align-items: center; }
+.d-1-2 { height: 50px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+.d-1-3 { height: 50px; display: flex; align-items: center; }
+.numero {
+    display: inline-block;
+    width: 30px;
+    height: 40px;
+    border: 1px solid #000;
+    text-align: center;
+    line-height: 40px;
+    font-size: 25px;
+    margin-right: 5px;
+    background-color: #FFF;
+}
+.pisca { animation: pisca 1s infinite; }
+@keyframes pisca {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+}
+.d-1-4 {
+    flex: 1;
+    line-height: 1.5; /* Melhor legibilidade */
+}
+
+/* Lado direito da tela (foto) */
+.d-1-right {
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza a caixa de foto */
+}
+.d-1-imagem {
+    border: 1px solid #000;
+    background-color: #FFF;
+    text-align: center;
+    font-size: 14px;
+    padding: 5px;
+    width: 100%;
+}
+.d-1-imagem img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+}
+
+/* Mensagem de VOTO NULO/BRANCO */
+.aviso--grande {
+    font-size: 40px; /* Ajustado para caber melhor em telas menores */
+    font-weight: bold;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* ================================== */
+/* TECLADO                            */
+/* ================================== */
+.teclado {
+    background-color: #403A3A;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px; /* Espaçamento entre tela e teclado */
+    margin-left: 0; /* Remove a margem lateral do layout desktop */
+}
+
+.teclado--linha {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Espaçamento moderno entre botões */
+    margin-bottom: 10px;
+}
+.teclado--linha:last-child {
+    margin-bottom: 0;
+}
+
+.teclado--botao {
+    width: 70px; /* Tamanho um pouco menor para caber melhor */
+    height: 50px;
+    background-color: #000;
+    color: #FFF;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: 3px 3px 0px #555;
+    transition: all 0.1s;
+}
+.teclado--botao:active {
+    transform: translate(3px, 3px);
+    box-shadow: none;
+}
+
+/* Botões de ação */
+.botao--branco { background-color: #FFF; color: #000; font-size: 15px; font-weight: bold; }
+.botao--corrige { background-color: #F09046; color: #000; font-size: 15px; font-weight: bold; }
+.botao--confirma { background-color: #48C079; color: #000; font-size: 15px; font-weight: bold; width: 90px; }
+
+/* ================================================== */
+/* RESPONSIVIDADE PARA TABLET (HORIZONTAL) E DESKTOP  */
+/* (Aplica quando a tela for maior que 820px)       */
+/* ================================================== */
+@media (min-width: 820px) {
+    .urna {
+        flex-direction: row; /* LAYOUT HORIZONTAL: Lado a lado */
+        max-width: 900px;
+    }
+
+    .tela {
+        width: 500px; /* Retorna a largura fixa para a tela */
+    }
+
+    .teclado {
+        margin-top: 0; /* Remove o espaçamento superior */
+        margin-left: 30px; /* Adiciona o espaçamento lateral */
+    }
+
+    /* Retorna os botões ao tamanho original do desktop */
+    .teclado--botao {
+        width: 80px;
+    }
+    .botao--confirma {
+        width: 100px;
+        height: 60px;
+    }
+}
